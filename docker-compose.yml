@@ -42,9 +42,6 @@ services:
       #      - 51413:51413/udp  # UDP port for DHT
     restart: unless-stopped
     # Custom Transmission settings to improve resilience
-    configs:
-      - source: transmission-settings
-        target: /config/settings.json
 
   # Optional: Network monitor and connection manager
   connection-manager:
