@@ -1,8 +1,0 @@
-/target
-/tmp
-
-**/criterion/*/change
-**/criterion/*/new
-
-.DS_Store
-.env
