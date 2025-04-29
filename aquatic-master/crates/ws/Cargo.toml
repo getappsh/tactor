@@ -1,0 +1,67 @@
+[package]
+name = "aquatic_ws"
+description = "High-performance open WebTorrent tracker"
+keywords = ["webtorrent", "websocket", "peer-to-peer", "torrent", "bittorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+
+readme = "./README.md"
+rust-version = "1.70"
+
+[lib]
+name = "aquatic_ws"
+
+[[bin]]
+name = "aquatic_ws"
+
+[features]
+default = ["prometheus", "mimalloc"]
+prometheus = ["metrics", "aquatic_common/prometheus"]
+metrics = ["dep:metrics", "dep:metrics-util"]
+# Use mimalloc allocator for much better performance.
+#
+# Requires cmake and a C compiler
+mimalloc = ["dep:mimalloc"]
+
+[dependencies]
+aquatic_common = { workspace = true, features = ["rustls"] }
+aquatic_peer_id.workspace = true
+aquatic_toml_config.workspace = true
+aquatic_ws_protocol.workspace = true
+
+anyhow = "1"
+async-tungstenite = "0.28"
+arc-swap = "1"
+cfg-if = "1"
+futures = "0.3"
+futures-lite = "1"
+futures-rustls = "0.26"
+glommio = "0.9"
+hashbrown = { version = "0.15", features = ["serde"] }
+httparse = "1"
+indexmap = "2"
+log = "0.4"
+privdrop = "0.5"
+rand = { version = "0.8", features = ["small_rng"] }
+rustls = "0.23"
+rustls-pemfile = "2"
+serde = { version = "1", features = ["derive"] }
+signal-hook = { version = "0.3" }
+slab = "0.4"
+slotmap = "1"
+socket2 = { version = "0.5", features = ["all"] }
+tungstenite = "0.24"
+
+# metrics feature
+metrics = { version = "0.24", optional = true }
+metrics-util = { version = "0.19", optional = true }
+
+# mimalloc feature
+mimalloc = { version = "0.1", default-features = false, optional = true }
+
+[dev-dependencies]
+quickcheck = "1"
+quickcheck_macros = "1"

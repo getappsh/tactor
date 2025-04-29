@@ -1,0 +1,39 @@
+[package]
+name = "aquatic_udp_load_test"
+description = "BitTorrent (UDP) load tester"
+keywords = ["udp", "benchmark", "peer-to-peer", "torrent", "bittorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+readme = "README.md"
+
+[features]
+cpu-pinning = ["aquatic_common/cpu-pinning"]
+
+[lib]
+name = "aquatic_udp_load_test"
+
+[[bin]]
+name = "aquatic_udp_load_test"
+
+[dependencies]
+aquatic_common.workspace = true
+aquatic_toml_config.workspace = true
+aquatic_udp_protocol.workspace = true
+
+anyhow = "1"
+crossbeam-channel = "0.5"
+hdrhistogram = "7"
+mimalloc = { version = "0.1", default-features = false }
+rand_distr = "0.4"
+rand = { version = "0.8", features = ["small_rng"] }
+serde = { version = "1", features = ["derive"] }
+socket2 = { version = "0.5", features = ["all"] }
+
+[dev-dependencies]
+quickcheck = "1"
+quickcheck_macros = "1"

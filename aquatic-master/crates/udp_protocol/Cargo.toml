@@ -1,0 +1,24 @@
+[package]
+name = "aquatic_udp_protocol"
+description = "UDP BitTorrent tracker protocol"
+keywords = ["udp", "protocol", "peer-to-peer", "torrent", "bittorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+readme = "./README.md"
+
+[dependencies]
+aquatic_peer_id.workspace = true
+
+byteorder = "1"
+either = "1"
+zerocopy = { version = "0.7", features = ["derive"] }
+
+[dev-dependencies]
+pretty_assertions = "1"
+quickcheck = "1"
+quickcheck_macros = "1"

@@ -1,0 +1,64 @@
+services:
+  # Aquatic UDP Tracker
+  tracker:
+    build:
+      context: .
+      dockerfile: aquatic_udp.Dockerfile
+    container_name: aquatic-tracker
+    network_mode: host  # Better performance for UDP traffic
+    environment:
+      CONFIG_FILE_CONTENTS: |
+        log_level = 'info'
+      ACCESS_LIST_CONTENTS: ""  # Open access or add specific info hashes
+    restart: unless-stopped
+
+  # Transmission BitTorrent Client
+  transmission:
+    image: linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=UTC
+      - USER=admin  # Web UI username
+      - PASS=tactical_pass  # Web UI password
+      # Use environment variables to set Transmission settings
+      - TRANSMISSION_RATIO_LIMIT=2.0
+      - TRANSMISSION_RATIO_LIMIT_ENABLED=true
+      - TRANSMISSION_ALT_SPEED_DOWN=50  # Limited download for low bandwidth (KB/s)
+      - TRANSMISSION_ALT_SPEED_UP=10    # Limited upload for low bandwidth (KB/s)
+      - TRANSMISSION_ALT_SPEED_ENABLED=true
+      - TRANSMISSION_DOWNLOAD_QUEUE_SIZE=2  # Limit concurrent downloads
+      - TRANSMISSION_INCOMPLETE_DIR_ENABLED=true
+      - TRANSMISSION_RPC_HOST_WHITELIST_ENABLED=false
+    volumes:
+      - ./transmission/config:/config
+      - ./transmission/downloads:/downloads
+      - ./transmission/watch:/watch  # Auto-add torrents from this directory
+    ports:
+      - 9091:9091  # Web UI
+      - 52413:51413  # Port for incoming BitTorrent connections (using 52413 externally)
+      - 52413:51413/udp  # UDP port for DHT (using 52413 externally)
+      #      - 51413:51413/udp  # UDP port for DHT
+    restart: unless-stopped
+    # Custom Transmission settings to improve resilience
+    configs:
+      - source: transmission-settings
+        target: /config/settings.json
+
+  # Optional: Network monitor and connection manager
+  connection-manager:
+    build:
+      context: .
+      dockerfile: connection-manager.Dockerfile
+    container_name: bt-connection-manager
+    network_mode: host  # Needed to monitor network
+    volumes:
+      - ./transmission/config:/transmission-config:ro
+    depends_on:
+      - transmission
+    restart: unless-stopped
+
+configs:
+  transmission-settings:
+    file: ./transmission-settings.json

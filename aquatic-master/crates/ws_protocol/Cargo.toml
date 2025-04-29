@@ -1,0 +1,38 @@
+[package]
+name = "aquatic_ws_protocol"
+description = "WebTorrent tracker protocol"
+exclude = ["target"]
+keywords = ["webtorrent", "protocol", "peer-to-peer", "torrent", "bittorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+readme = "./README.md"
+
+[features]
+default = ["tungstenite"]
+tungstenite = ["dep:tungstenite"]
+
+[lib]
+name = "aquatic_ws_protocol"
+
+[[bench]]
+name = "bench_deserialize_announce_request"
+path = "benches/bench_deserialize_announce_request.rs"
+harness = false
+
+[dependencies]
+anyhow = "1"
+hashbrown = { version = "0.15", features = ["serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+simd-json = "0.14"
+tungstenite = { version = "0.24", optional = true }
+
+[dev-dependencies]
+criterion = "0.5"
+quickcheck = "1"
+quickcheck_macros = "1"

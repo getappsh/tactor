@@ -1,0 +1,73 @@
+[package]
+name = "aquatic_udp"
+description = "High-performance open UDP BitTorrent tracker"
+keywords = ["udp", "server", "peer-to-peer", "torrent", "bittorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+
+readme = "./README.md"
+
+[lib]
+name = "aquatic_udp"
+
+[[bin]]
+name = "aquatic_udp"
+
+[features]
+default = ["prometheus", "mimalloc"]
+# Export prometheus metrics
+prometheus = ["metrics", "aquatic_common/prometheus"]
+# Experimental io_uring support (Linux 6.0 or later required)
+io-uring = ["dep:io-uring"]
+# Use mimalloc allocator for much better performance.
+#
+# Requires cmake and a C compiler
+mimalloc = ["dep:mimalloc"]
+
+[dependencies]
+aquatic_common.workspace = true
+aquatic_toml_config.workspace = true
+aquatic_udp_protocol.workspace = true
+
+anyhow = "1"
+arrayvec = "0.7"
+blake3 = "1"
+cfg-if = "1"
+compact_str = "0.8"
+constant_time_eq = "0.3"
+crossbeam-channel = "0.5"
+crossbeam-utils = "0.8"
+getrandom = "0.2"
+hashbrown = { version = "0.15", default-features = false }
+hdrhistogram = "7"
+hex = "0.4"
+libc = "0.2"
+log = "0.4"
+mio = { version = "1", features = ["net", "os-poll"] }
+num-format = "0.4"
+parking_lot = "0.12"
+rand = { version = "0.8", features = ["small_rng"] }
+serde = { version = "1", features = ["derive"] }
+signal-hook = { version = "0.3" }
+slab = "0.4"
+socket2 = { version = "0.5", features = ["all"] }
+time = { version = "0.3", features = ["formatting"] }
+tinytemplate = "1"
+
+# prometheus feature
+metrics = { version = "0.24", optional = true }
+
+# io-uring feature
+io-uring = { version = "0.7", optional = true }
+
+# mimalloc feature
+mimalloc = { version = "0.1", default-features = false, optional = true }
+
+[dev-dependencies]
+tempfile = "3"
+quickcheck = "1"
+quickcheck_macros = "1"

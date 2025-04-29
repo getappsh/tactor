@@ -1,0 +1,16 @@
+name: 'test-file-transfers'
+description: 'test aquatic file transfers'
+outputs:
+  # http_ipv4:
+  #   description: 'HTTP IPv4 status'
+  http_tls_ipv4:
+    description: 'HTTP IPv4 over TLS status'
+  udp_ipv4:
+    description: 'UDP IPv4 status'
+  wss_ipv4:
+    description: 'WSS IPv4 status'
+runs:
+  using: 'composite'
+  steps:
+    - run: $GITHUB_ACTION_PATH/entrypoint.sh
+      shell: bash

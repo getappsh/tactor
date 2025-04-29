@@ -1,0 +1,21 @@
+[package]
+name = "aquatic"
+description = "High-performance open BitTorrent tracker (UDP, HTTP, WebTorrent)"
+keywords = ["bittorrent", "torrent", "webtorrent"]
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+readme.workspace = true
+rust-version.workspace = true
+
+[[bin]]
+name = "aquatic"
+
+[dependencies]
+aquatic_common.workspace = true
+aquatic_http.workspace = true
+aquatic_udp.workspace = true
+aquatic_ws.workspace = true
+mimalloc = { version = "0.1", default-features = false }
